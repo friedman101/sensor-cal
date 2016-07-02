@@ -8,7 +8,7 @@
 #define TEST_LEN 1000
 #define NUM_ITER 100
 #define MAG 3
-#define TOL 1e-4
+#define TOL 1e-6
 
 int main() {
     double test_data[TEST_LEN][3];
@@ -22,8 +22,8 @@ int main() {
     }
     fclose(f);
 
-    double A[3][3] = { {3, 3, 3}, {0, 3, 3}, {0, 3, 3} };
-    double b[3] = {5, 5, 5};
+    double A[3][3] = { {1.5, 0, 0}, {2.5, 3.5, 0}, {4.5, 5.5, 6.5} };
+    double b[3] = {7.5, 8.5, 9.5};
     
     printf("before cal:\n");
     printf("A = [%f %f %f;\n %f %f %f;\n %f %f %f]\n",

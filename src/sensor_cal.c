@@ -6,8 +6,8 @@
 #define SPLIT_VARS \
 double a1, a2, a3, a4, a5, a6; \
 double b1, b2, b3; \
-a1 = A[0][0]; a2 = A[0][1]; a3 = A[0][2]; \
-a4 = A[1][1]; a5 = A[1][2]; a6 = A[2][2]; \
+a1 = A[0][0]; a2 = A[1][0]; a3 = A[1][1]; \
+a4 = A[2][0]; a5 = A[2][1]; a6 = A[2][2]; \
 b1 = b[0]; b2 = b[1]; b3 = b[2];
 
 #define SPLIT_INPUTS \
@@ -29,10 +29,10 @@ gsl_matrix_set(B, 8, 0, b3); \
 
 #define UNPACK_B \
 A[0][0] = gsl_matrix_get(B, 0, 0); \
-A[0][1] = gsl_matrix_get(B, 1, 0); \
-A[0][2] = gsl_matrix_get(B, 2, 0); \
-A[1][1] = gsl_matrix_get(B, 3, 0); \
-A[1][2] = gsl_matrix_get(B, 4, 0); \
+A[1][0] = gsl_matrix_get(B, 1, 0); \
+A[1][1] = gsl_matrix_get(B, 2, 0); \
+A[2][0] = gsl_matrix_get(B, 3, 0); \
+A[2][1] = gsl_matrix_get(B, 4, 0); \
 A[2][2] = gsl_matrix_get(B, 5, 0); \
 b[0] = gsl_matrix_get(B, 6, 0); \
 b[1] = gsl_matrix_get(B, 7, 0); \
@@ -46,9 +46,9 @@ double calc_residual(double (*x)[3], unsigned int x_len,
     double e = 0;
     for (unsigned int i = 0; i < x_len; i++) {
         SPLIT_INPUTS;
-        double p1 = a6*x3+b3;
-        double p2 = a5*x3+a4*x2+b2;
-        double p3 = a3*x3+a2*x2+a1*x1+b1;
+        double p1 = a6*x3+a5*x2+a4*x1+b3;
+        double p2 = a3*x2+a2*x1+b2;
+        double p3 = a1*x1+b1;
         double my_mag = p1*p1 + p2*p2 + p3*p3;
         double my_residual = x_mag*x_mag - my_mag;
         gsl_matrix_set(residual, i, 0, my_residual);
@@ -62,9 +62,9 @@ unsigned int cal(double (*x)[3], unsigned int x_len,
         double x_mag, double A[3][3], double b[3],
         unsigned int max_iter, double tol) {
 
-    A[1][0] = 0;
-    A[2][0] = 0;
-    A[2][1] = 0;
+    A[0][1] = 0;
+    A[0][2] = 0;
+    A[1][2] = 0;
 
     gsl_permutation *p = gsl_permutation_alloc(9);
     gsl_matrix *J = gsl_matrix_alloc(x_len, 9);
@@ -88,15 +88,15 @@ unsigned int cal(double (*x)[3], unsigned int x_len,
         SPLIT_VARS;
         for (unsigned int i = 0; i < x_len; i++) {
             SPLIT_INPUTS;
-            double J_mat[9] = {2*x1*(a3*x3+a2*x2+a1*x1+b1),
-                2*x2*(a3*x3+a2*x2+a1*x1+b1),
-                2*x3*(a3*x3+a2*x2+a1*x1+b1),
-                2*x2*(a5*x3+a4*x2+b2),
-                2*x3*(a5*x3+a4*x2+b2),
-                2*x3*(a6*x3+b3),
-                2*(a3*x3+a2*x2+a1*x1+b1),
-                2*(a5*x3+a4*x2+b2),
-                2*(a6*x3+b3)};
+            double J_mat[9] = {2*x1*(a1*x1+b1),
+                2*x1*(a3*x2+a2*x1+b2),
+                2*x2*(a3*x2+a2*x1+b2),
+                2*x1*(a6*x3+a5*x2+a4*x1+b3),
+                2*x2*(a6*x3+a5*x2+a4*x1+b3),
+                2*x3*(a6*x3+a5*x2+a4*x1+b3),
+                2*(a1*x1+b1),
+                2*(a3*x2+a2*x1+b2),
+                2*(a6*x3+a5*x2+a4*x1+b3)};
             for (unsigned int k = 0; k < 9; k++)
                 gsl_matrix_set(J, i, k, J_mat[k]);
         }
