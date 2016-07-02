@@ -10,7 +10,7 @@ out = randn(n,3);
 in = out;
 for i = 1:n
     myOut = out(i,:);
-    myOut = myOut/norm(myOut)*3;
+    myOut = myOut/norm(myOut)*mag;
     myIn = inv(A)*(myOut(:) - b);
     in(i,:) = myIn;
 end
