@@ -1,6 +1,35 @@
 # sensor-cal
 `sensor-cal` is a small library for calibrating magnetometers and similar devices. It performs a non-linear least squares optimization to solve for scale factor, bias, and non-orthogonality terms of your device. It works for measurements which will have a constant magnitude regardless of orientation.
 
+The assumption is the relationship between the engineering unit output of your device (say, magnetic field in Guass) and actual output (say, volts) can be described by a linear transform of the type
+
+```
+y = Ax + b
+```
+
+Where `A` is a matrix that contains scale factor and non-orthogonality terms
+
+```
+A = [SFx 0 0; yx SFy 0; zx zy SFz]
+```
+
+and `b` are bias values
+```
+b = [bx; by; bz]
+```
+
+Why does `A` contain 3 cells of zeros? As this is an entirely referenceless calibration the axes can only be misaligned relative to one another. The x-axis is the reference axis and thus cannot be misaligned by definition. The y-axis is only partially defined as it is expected to by 90° from x. Any deviation from this results in a non-zero `yz`. The z-axis is then fully defined as `cross(x,y)` and any deviation from this results in a non-zero `zx` and/or non-zero `zy`.
+
+## Building
+The only dependancies are libgsl and cmake. Use brew, apt-get, yum, etc to get those. Then just clone and build
+
+```
+git clone git@github.com:friedman101/sensor-cal.git
+cd sensor-cal
+cmake .
+make
+```
+
 ## Example Usage
 Collect 1000 samples from a dinky MEMS magnetometer, store them in a 1000x3 vector.
 
