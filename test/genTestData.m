@@ -2,7 +2,7 @@ clear all; close all;
 
 rand('seed', 1);
 
-n = 1000;
+n = 100000;
 mag = 3;
 A = [1 0 0; 2 3 0; 4 5 6];
 b = [7;8;9];
