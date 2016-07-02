@@ -72,3 +72,22 @@ cal(x, x_len, y_mag, A, b, max_iter, tol);
 
 ## Test Utility
 An example routine `test-cal` is provided which parses a set of data with known calibration values and runs the data through the calibration routine.
+
+To generate the test vectors you'll need to run `genTestData` using Octave.
+
+Running `test-cal` on my machine produces the following output
+
+```
+before cal:
+A = [1.500000 0.000000 0.000000;
+ 2.500000 3.500000 0.000000;
+ 4.500000 5.500000 6.500000]
+b = [7.500000; 8.500000; 9.500000]
+took 273.86 ms to optimize 100000 samples
+done in 9 iterations
+after cal:
+A = [0.999972 0.000000 0.000000;
+ 1.999765 2.999738 0.000000;
+ 4.000188 5.000156 5.999929]
+b = [6.999744; 7.998878; 9.001096]
+```
