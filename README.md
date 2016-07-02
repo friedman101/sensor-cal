@@ -2,7 +2,7 @@
 `sensor-cal` is a small library for calibrating magnetometers and similar devices. It performs a non-linear least squares optimization to solve for scale factor, bias, and non-orthogonality terms of your device. It works for measurements which will have a constant magnitude regardless of orientation.
 
 ## Example Usage
-Collect 1000 samples from a dinky MEMS magnetometer, store them im a 1000x3 vector.
+Collect 1000 samples from a dinky MEMS magnetometer, store them in a 1000x3 vector.
 
 ```
 unsigned int x_len = 1000;
@@ -15,7 +15,7 @@ One piece of data you'll need to know is the magnitude of your measurements, thi
 double y_mag = 3;
 ```
 
-This optimization attempts to find `A` and `b` such that `y=Ax+b` best fits your data assuming `y` has magnitude `out_mag`. You'll need to make an initial guess of `A` and `b`.
+This optimization attempts to find `A` and `b` such that `y=Ax+b` best fits your data assuming `y` has magnitude `y_mag`. You'll need to make an initial guess of `A` and `b`.
 
 ```
 double A[3][3] = ...
