@@ -20,6 +20,35 @@ b = [bx; by; bz]
 
 Why does `A` contain 3 cells of zeros? As this is an entirely referenceless calibration the axes can only be misaligned relative to one another. The x-axis is the reference axis and thus cannot be misaligned by definition. The y-axis is only partially defined as it is expected to by 90° from x. Any deviation from this results in a non-zero `yz`. The z-axis is then fully defined as `cross(x,y)` and any deviation from this results in a non-zero `zx` and/or non-zero `zy`.
 
+## How it works
+Feel free to skip this section if you aren't a nerd.
+
+This is a classic non-linear least squares optimizer. For a single data-point (3 scalars) we assume the following relationship
+
+```
+y = Ax+b
+```
+
+In essense we want to drive the residual `r` as close to zero as possible
+
+```
+r = y - Ax - b
+```
+
+To minimize `r` we'll want it's gradient, `J`, with respect to the parameters of interest `p`. The gradient points in the direction of greatest increase of `r`.
+
+Now we can use Newton's method to minimize `r`
+
+```
+p = p + inv(J)r
+```
+
+This works well if `J` is square (which it likely won't be). More often than not J is "tall and skinny" meaning you have more measurements than parameters to find. In this case we must use the Moore-Penrose pseudoinverse
+
+```
+p = p + inv(A'A)A'r
+```
+
 ## Building
 The only dependancies are libgsl and cmake. Use brew, apt-get, yum, etc to get those. Then just clone and build
 
