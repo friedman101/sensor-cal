@@ -28,7 +28,7 @@ Set a max number of iterations you want the algorithm to perform.
 double max_iter = 100;
 ```
 
-And a tolerance for `|y-Ax-b|`, once the algorithm's solution is beneath this tolerance it will stop iterating.
+And a tolerance for when to stop iterating. Once the algorithm's solution is improving by less than `tol*100` percent it will stop iterating.
 
 ```
 double tol = 1e-4;

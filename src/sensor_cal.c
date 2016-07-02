@@ -52,9 +52,7 @@ double calc_residual(double (*x)[3], unsigned int x_len,
         double my_mag = p1*p1 + p2*p2 + p3*p3;
         double my_residual = x_mag*x_mag - my_mag;
         gsl_matrix_set(residual, i, 0, my_residual);
-        double my_e = fabs(my_residual);
-        if (my_e > e)
-            e = my_e;
+        e += fabs(my_residual);
     }
 
     return e;
@@ -79,9 +77,12 @@ unsigned int cal(double (*x)[3], unsigned int x_len,
     gsl_matrix *JtJinvJtr = gsl_matrix_alloc(9, 1);
 
     unsigned int j;
+    double e_old = 0;
     for (j = 0; j < max_iter; j++) {
         double e = calc_residual(x, x_len, x_mag, A, b, residual);
-        if (e < tol)
+        double pct_improve = (e - e_old)/e_old;
+        e_old = e;
+        if (pct_improve < tol && pct_improve >= 0)
             break;
 
         SPLIT_VARS;
