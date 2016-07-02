@@ -29,10 +29,12 @@ This is a classic non-linear least squares optimizer. For a single data-point (3
 y = Ax+b
 ```
 
-In essense we want to drive the residual `r` as close to zero as possible
+In this problem we do not know `y` but we do know its magnitude, `y_mag`, which will be constant over all the data points. To ground this concept, imagine collecting data while rotating a magnetometer. While you may not know the direction of the magnetic field in each orientation the overall magnitude will stay the same and is easy to measure. This knowledge alone is enough to calibrate the device.
+
+We now define a residual `r` which we want to drive as close to zero as possible
 
 ```
-r = y - Ax - b
+r = y_mag^2 - [Ax + b]'[Ax + b]
 ```
 
 To minimize `r` we'll want it's gradient, `J`, with respect to the parameters of interest `p`. The gradient points in the direction of greatest increase of `r`.
@@ -43,11 +45,13 @@ Now we can use Newton's method to minimize `r`
 p = p + inv(J)r
 ```
 
-This works well if `J` is square (which it likely won't be). More often than not J is "tall and skinny" meaning you have more measurements than parameters to find. In this case we must use the Moore-Penrose pseudoinverse
+This works well if `J` is square (which it likely won't be). More often than not `J` is "tall and skinny" meaning you have more measurements than parameters to find. In this case we must use the Moore-Penrose pseudoinverse
 
 ```
 p = p + inv(A'A)A'r
 ```
+
+At each iteration of the algorithm `p` is changing and thus `J` is recomputed. When an iteration fails to reduce `r` by more than a user-defined threshhold the algorithm stops.
 
 ## Building
 The only dependancies are libgsl and cmake. Use brew, apt-get, yum, etc to get those. Then just clone and build
