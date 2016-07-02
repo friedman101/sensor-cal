@@ -77,11 +77,10 @@ unsigned int cal(double (*x)[3], unsigned int x_len,
     gsl_matrix *residual = gsl_matrix_alloc(x_len, 1);
     gsl_matrix *B = gsl_matrix_alloc(9, 1);
     gsl_matrix *JtJinvJtr = gsl_matrix_alloc(9, 1);
-    double e = 0;
 
     unsigned int j;
     for (j = 0; j < max_iter; j++) {
-        e = calc_residual(x, x_len, x_mag, A, b, residual);
+        double e = calc_residual(x, x_len, x_mag, A, b, residual);
         if (e < tol)
             break;
 
