@@ -38,7 +38,7 @@ double tol = 1e-4;
 Now call the `cal` function.
 
 ```
-cal(x, x_len, y_mag, A, B, max_iter, tol);
+cal(x, x_len, y_mag, A, b, max_iter, tol);
 ```
 
 ## Test Utility
