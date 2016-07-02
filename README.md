@@ -34,5 +34,5 @@ Now call the `cal` function.
 cal(in_data, in_data_len, out_mag, A, B, max_iter);
 ```
 
-## Test Script
+## Test Utility
 An example routine `test-cal` is provided which parses a set of data with known calibration values and runs the data through the calibration routine.
