@@ -22,15 +22,14 @@ int main() {
     }
     fclose(f);
 
-    double A[3][3] = { {5, 0, 0}, {0, 6, 0}, {0, 0, 7} };
-    double b[3] = {3,3,3};
+    double A[3][3] = { {3, 3, 3}, {0, 3, 3}, {0, 3, 3} };
+    double b[3] = {5, 5, 5};
     
     printf("before cal:\n");
     printf("A = [%f %f %f;\n %f %f %f;\n %f %f %f]\n",
     A[0][0], A[0][1], A[0][2], A[1][0], A[1][1],
     A[1][2], A[2][0], A[2][1], A[2][2]);
-
-
+    printf("b = [%f; %f; %f]\n", b[0], b[1], b[2]);
 
     unsigned int c = cal(test_data, TEST_LEN, MAG, A, b, NUM_ITER, TOL);
 
@@ -40,7 +39,6 @@ int main() {
     printf("A = [%f %f %f;\n %f %f %f;\n %f %f %f]\n",
     A[0][0], A[0][1], A[0][2], A[1][0], A[1][1],
     A[1][2], A[2][0], A[2][1], A[2][2]);
-
     printf("b = [%f; %f; %f]\n", b[0], b[1], b[2]);
 
 }
