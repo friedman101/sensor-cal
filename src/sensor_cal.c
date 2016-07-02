@@ -4,7 +4,7 @@
 #include <gsl/gsl_blas.h>
 
 #define SPLIT_VARS \
-    double a1, a2, a3, a4, a5, a6; \
+double a1, a2, a3, a4, a5, a6; \
 double b1, b2, b3; \
 a1 = A[0][0]; a2 = A[0][1]; a3 = A[0][2]; \
 a4 = A[1][1]; a5 = A[1][2]; a6 = A[2][2]; \
