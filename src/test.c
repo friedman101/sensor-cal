@@ -8,6 +8,7 @@
 #define TEST_LEN 1000
 #define NUM_ITER 100
 #define MAG 3
+#define TOL 1e-4
 
 int main() {
     double test_data[TEST_LEN][3];
@@ -31,9 +32,10 @@ int main() {
 
 
 
-    cal(test_data, TEST_LEN, MAG, A, b, NUM_ITER);
+    unsigned int c = cal(test_data, TEST_LEN, MAG, A, b, NUM_ITER, TOL);
 
 
+    printf("done in %i iterations\n", c);
     printf("after cal:\n");
     printf("A = [%f %f %f;\n %f %f %f;\n %f %f %f]\n",
     A[0][0], A[0][1], A[0][2], A[1][0], A[1][1],

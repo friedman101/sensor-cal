@@ -5,14 +5,14 @@
 Collect 1000 samples from a dinky MEMS magnetometer, store them im a 1000x3 vector.
 
 ```
-unsigned int max_iter = 1000;
-double in_data[1000][3] = ...
+unsigned int x_len = 1000;
+double x[1000][3] = ...
 ```
 
 One piece of data you'll need to know is the magnitude of your measurements, this must be roughly constant in a fixed position regardless of orientation.
 
 ```
-double out_mag = 3;
+double y_mag = 3;
 ```
 
 This optimization attempts to find `A` and `b` such that `y=Ax+b` best fits your data assuming `y` has magnitude `out_mag`. You'll need to make an initial guess of `A` and `b`.
@@ -22,16 +22,23 @@ double A[3][3] = ...
 double b[3] = ...
 ```
 
-And set a max number of iterations you want the algorithm to perform.
+Set a max number of iterations you want the algorithm to perform.
 
 ```
 double max_iter = 100;
 ```
 
+And a tolerance for `|y-Ax-b|`, once the algorithm's solution is beneath this tolerance it will stop iterating.
+
+```
+double tol = 1e-4;
+```
+
+
 Now call the `cal` function.
 
 ```
-cal(in_data, in_data_len, out_mag, A, B, max_iter);
+cal(x, x_len, y_mag, A, B, max_iter, tol);
 ```
 
 ## Test Utility

@@ -12,42 +12,51 @@ b1 = b[0]; b2 = b[1]; b3 = b[2];
 
 #define SPLIT_INPUTS \
 double x1, x2, x3; \
-x1 = in_data[i][0]; \
-x2 = in_data[i][1]; \
-x3 = in_data[i][2];
+x1 = x[i][0]; \
+x2 = x[i][1]; \
+x3 = x[i][2];
 
-double calc_residual(double (*in_data)[3], unsigned int in_data_len,
-        double out_mag, double A[3][3], double b[3], gsl_matrix *residual) {
+double calc_residual(double (*x)[3], unsigned int x_len,
+        double x_mag, double A[3][3], double b[3], gsl_matrix *residual) {
 
     SPLIT_VARS
     double e = 0;
-    for (unsigned int i = 0; i < in_data_len; i++) {
+    for (unsigned int i = 0; i < x_len; i++) {
         SPLIT_INPUTS
-        double my_mag = pow(a6*x3+b3, 2)+pow(a5*x3+a4*x2+b2, 2)+pow(a3*x3+a2*x2+a1*x1+b1, 2);
-        double my_residual = out_mag*out_mag - my_mag;
+        double p1 = a6*x3+b3;
+        double p2 = a5*x3+a4*x2+b2;
+        double p3 = a3*x3+a2*x2+a1*x1+b1;
+        double my_mag = p1*p1 + p2*p2 + p3*p3;
+        double my_residual = x_mag*x_mag - my_mag;
         gsl_matrix_set(residual, i, 0, my_residual);
-        e += my_residual*my_residual;
+        double my_e = fabs(my_residual);
+        if (my_e > e)
+            e = my_e;
     }
 
     return e;
 }
 
-unsigned int cal(double (*in_data)[3], unsigned int in_data_len,
-        double out_mag, double A[3][3], double b[3],
-        unsigned int max_iter) {
+unsigned int cal(double (*x)[3], unsigned int x_len,
+        double x_mag, double A[3][3], double b[3],
+        unsigned int max_iter, double tol) {
 
     gsl_permutation *p = gsl_permutation_alloc(9);
-    gsl_matrix *J = gsl_matrix_alloc(in_data_len, 9);
-    gsl_matrix *Jt = gsl_matrix_alloc(9, in_data_len);
+    gsl_matrix *J = gsl_matrix_alloc(x_len, 9);
+    gsl_matrix *Jt = gsl_matrix_alloc(9, x_len);
     gsl_matrix *JtJ = gsl_matrix_alloc(9, 9);
     gsl_matrix *JtJinv = gsl_matrix_alloc(9, 9);
-    gsl_matrix *JtJinvJt = gsl_matrix_alloc(9, in_data_len);
-    gsl_matrix *residual = gsl_matrix_alloc(in_data_len, 1);
+    gsl_matrix *JtJinvJt = gsl_matrix_alloc(9, x_len);
+    gsl_matrix *residual = gsl_matrix_alloc(x_len, 1);
     gsl_matrix *B = gsl_matrix_alloc(9, 1);
     gsl_matrix *JtJinvJtr = gsl_matrix_alloc(9, 1);
+    double e = 0;
 
-    for (unsigned int j = 0; j < max_iter; j++) {
-        calc_residual(in_data, in_data_len, out_mag, A, b, residual); 
+    unsigned int j;
+    for (j = 0; j < max_iter; j++) {
+        e = calc_residual(x, x_len, x_mag, A, b, residual);
+        if (e < tol)
+            break;
 
         SPLIT_VARS
         gsl_matrix_set(B, 0, 0, a1);
@@ -59,7 +68,7 @@ unsigned int cal(double (*in_data)[3], unsigned int in_data_len,
         gsl_matrix_set(B, 6, 0, b1);
         gsl_matrix_set(B, 7, 0, b2);
         gsl_matrix_set(B, 8, 0, b3);
-        for (unsigned int i = 0; i < in_data_len; i++) {
+        for (unsigned int i = 0; i < x_len; i++) {
             SPLIT_INPUTS
             double J_mat[9] = {2*x1*(a3*x3+a2*x2+a1*x1+b1),
             2*x2*(a3*x3+a2*x2+a1*x1+b1), 
@@ -105,7 +114,7 @@ unsigned int cal(double (*in_data)[3], unsigned int in_data_len,
     gsl_matrix_free(J);
     gsl_permutation_free(p);
 
-    return 1;
+    return j;
 }
 
 
