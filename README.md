@@ -48,7 +48,7 @@ p = p + inv(J)r
 This works well if `J` is square (which it likely won't be). More often than not `J` is "tall and skinny" meaning you have more measurements than parameters to find. In this case we must use the Moore-Penrose pseudoinverse
 
 ```
-p = p + inv(A'A)A'r
+p = p + inv(J'J)J'r
 ```
 
 At each iteration of the algorithm `p` is changing and thus `J` is recomputed. When an iteration fails to reduce `r` by more than a user-defined threshhold the algorithm stops.
