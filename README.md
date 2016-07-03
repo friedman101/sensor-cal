@@ -57,7 +57,7 @@ At each iteration of the algorithm `p` is changing and thus `J` is recomputed. W
 The only dependancies are libgsl and cmake. Use brew, apt-get, yum, etc to get those. Then just clone and build
 
 ```
-git clone git@github.com:friedman101/sensor-cal.git
+git clone https://github.com/friedman101/sensor-cal.git
 cd sensor-cal
 cmake .
 make
