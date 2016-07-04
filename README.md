@@ -18,7 +18,7 @@ and `b` are bias values
 b = [bx; by; bz]
 ```
 
-Why does `A` contain 3 cells of zeros? As this is an entirely referenceless calibration the axes can only be misaligned relative to one another. The x-axis is the reference axis and thus cannot be misaligned by definition. The y-axis is only partially defined as it is expected to by 90° from x. Any deviation from this results in a non-zero `yz`. The z-axis is then fully defined as `cross(x,y)` and any deviation from this results in a non-zero `zx` and/or non-zero `zy`.
+Why does `A` contain 3 cells of zeros? As this is an entirely referenceless calibration the axes can only be misaligned relative to one another. The x-axis is the reference axis and thus cannot be misaligned by definition. The y-axis is only partially defined as it is expected to by 90° from x. Any deviation from this results in a non-zero `yx`. The z-axis is then fully defined as `cross(x,y)` and any deviation from this results in a non-zero `zx` and/or non-zero `zy`.
 
 ## How it works
 Feel free to skip this section if you aren't a nerd.
