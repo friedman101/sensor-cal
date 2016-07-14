@@ -35,7 +35,7 @@ gsl_matrix_set(B, 4, 0, a5); \
 gsl_matrix_set(B, 5, 0, a6); \
 gsl_matrix_set(B, 6, 0, b1); \
 gsl_matrix_set(B, 7, 0, b2); \
-gsl_matrix_set(B, 8, 0, b3); \
+gsl_matrix_set(B, 8, 0, b3);
 
 #define UNPACK_B \
 a1 = gsl_matrix_get(B, 0, 0); \
